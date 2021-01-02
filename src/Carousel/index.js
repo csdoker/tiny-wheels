@@ -1,5 +1,7 @@
 import '../../style/carousel.scss'
 
+const reflow = element => element.offsetHeight
+
 class Carousel {
   constructor (options) {
     const defaultOptions = {
@@ -70,7 +72,6 @@ class Carousel {
     this.bindCarouselArrow()
     this.bindCarouselDots()
     this.bindCarouselContainer()
-    this.bindPanelContainer()
   }
 
   bindCarouselArrow () {
@@ -108,12 +109,9 @@ class Carousel {
     }
   }
 
-  bindPanelContainer () {
-    this.$panelContainer.addEventListener('transitionend', this.resetCarouselPanel.bind(this), false)
-  }
-
   setCarousel (fromIndex, toIndex, direction) {
     if (!this.isAnimate) {
+      this.isAnimate = true
       this.$from = this.$$panels[fromIndex]
       this.$to = this.$$panels[toIndex]
       this.direction = direction
@@ -139,21 +137,22 @@ class Carousel {
   }
 
   setCarouselPanel () {
-    this.isAnimate = true
-    this.moveCarouselPanel()
-  }
-
-  moveCarouselPanel () {
     const type = this.direction === 'left' ? 'next' : 'prev'
     this.$to.setAttribute('class', `carousel-panel ${type}`)
-    this.$panelContainer.classList.add(`${this.direction}`)
+    reflow(this.$to)
+    this.$from.setAttribute('class', `carousel-panel active ${this.direction}`)
+    this.$to.setAttribute('class', `carousel-panel ${type} ${this.direction}`)
+    this.resetCarouselPanel()
   }
 
   resetCarouselPanel () {
-    this.$from.setAttribute('class', 'carousel-panel')
-    this.$to.setAttribute('class', 'carousel-panel active')
-    this.$panelContainer.classList.remove(`${this.direction}`)
-    this.isAnimate = false
+    const callback = () => {
+      this.$from.setAttribute('class', 'carousel-panel')
+      this.$to.setAttribute('class', 'carousel-panel active')
+      this.$from.removeEventListener('transitionend', callback, false)
+      this.isAnimate = false
+    }
+    this.$from.addEventListener('transitionend', callback, false)
   }
 
   setCarouselDot (index) {
