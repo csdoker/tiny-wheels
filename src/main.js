@@ -6,10 +6,14 @@ import Carousel from './Carousel'
 import Tree from './Tree'
 import treeDatas from './data'
 
+import Calendar from './Calendar'
+
 import '../asset/iconfont/iconfont.css'
 
 // const pager = new Pager(document.querySelector('.pager'))
 // console.log(pager.$container)
+
+new Calendar()
 
 new Tabs({
   element: document.querySelector('.tabs'),

@@ -1,0 +1,44 @@
+.tiny-calendar {
+  .head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    .left {
+      min-width: 100px;
+    }
+  }
+  .week-title {
+    display: flex;
+    .week {
+      min-width: 50px;
+      flex-basis: 14%;
+      text-align: center;
+    }
+  }
+  .calendar-panel {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 50px;
+      min-height: 50px;
+      flex-basis: 14%;
+      border-top: 1px solid #ccc;
+      border-left: 1px solid #ccc;
+      &.today {
+        font-size: 16px;
+        background-color: #ecfdf0;
+        font-weight: bold;
+      }
+      &:nth-of-type(7n) {
+        border-right: 1px solid #ccc;
+      }
+      &:nth-last-of-type(-n+7) {
+        border-bottom: 1px solid #ccc;
+      }
+    }
+  }
+}
